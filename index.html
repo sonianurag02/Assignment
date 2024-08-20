@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Chatbot</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+      .container {
+        width: 80%;
+        max-width: 800px;
+        margin-top: 50px;
+        text-align: center;
+      }
+      input,
+      button {
+        margin: 10px;
+        padding: 10px;
+        font-size: 16px;
+      }
+      #responses {
+        margin-top: 20px;
+        text-align: left;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>Chatbot</h1>
+      <div id="chat">
+        <input type="text" id="query" placeholder="Ask a question..." />
+        <button onclick="sendQuery()">Send</button>
+      </div>
+      <div id="responses"></div>
+    </div>
+
+    <script>
+      function sendQuery() {
+        const query = document.getElementById("query").value;
+        const responsesDiv = document.getElementById("responses");
+
+        fetch(`/faq?query=${encodeURIComponent(query)}`)
+          .then((response) => response.json())
+          .then((data) => {
+            const answer = data.answer;
+            responsesDiv.innerHTML += `<p><strong>You:</strong> ${query}</p>`;
+            responsesDiv.innerHTML += `<p><strong>Bot:</strong> ${answer}</p>`;
+          })
+          .catch((error) => {
+            console.error("Error:", error);
+          });
+      }
+    </script>
+  </body>
+</html>
